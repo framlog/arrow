@@ -287,8 +287,8 @@ AsyncGenerator<V> MakeMappedGenerator(AsyncGenerator<T> source_generator, MapFn 
 /// If the source generator is async-reentrant then this generator will be also
 template <typename T, typename MapFn,
           typename Mapped = detail::result_of_t<MapFn(const T&)>,
-          typename V = typename EnsureFuture<Mapped>::type::ValueType>
-AsyncGenerator<T> MakeFlatMappedGenerator(AsyncGenerator<T> source_generator, MapFn map) {
+          typename V = typename EnsureFuture<typename Mapped::result_type>::type::ValueType>
+AsyncGenerator<V> MakeFlatMappedGenerator(AsyncGenerator<T> source_generator, MapFn map) {
   return MakeConcatenatedGenerator(
       MakeMappedGenerator(std::move(source_generator), std::move(map)));
 }
